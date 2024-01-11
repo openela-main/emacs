@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       26.1
-Release:       10%{?dist}.2
+Release:       11%{?dist}
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Group:         Applications/Editors
@@ -26,7 +26,9 @@ Patch1:        emacs-spellchecker.patch
 Patch2:        emacs-system-crypto-policies.patch
 Patch3:        emacs-ctags-local-command-execute-vulnerability.patch
 Patch4:        emacs-mh-rmail-nonempty-dir.patch
-Patch5:        emacs-ob-latex-command-injection-vulnerability.patch
+Patch5:        emacs-etags-local-command-injection-vulnerability.patch
+Patch6:        emacs-htmlfontify-command-injection-vulnerability.patch
+Patch7:        emacs-ob-latex-command-injection-vulnerability.patch
 
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -183,7 +185,9 @@ packages that add functionality to Emacs.
 %patch2 -p1 -b .system-crypto-policies
 %patch3 -p1 -b .ctags-local-command-execute-vulnerability
 %patch4 -p1 -b .mh-rmail-nonempty-dir.patch
-%patch5 -p1 -b .ob-latex-command-injection-vulnerability
+%patch5 -p1 -b .etags-local-command-injection-vulnerability
+%patch6 -p1 -b .htmlfontify-command-injection-vulnerability
+%patch7 -p1 -b .ob-latex-command-injection-vulnerability
 autoconf
 
 # We prefer our emacs.desktop file
@@ -470,14 +474,13 @@ fi
 %dir %{_datadir}/emacs/site-lisp/site-start.d
 
 %changelog
-* Thu Apr 13 2023 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-10.2
-- Bump release
-
-* Thu Apr 13 2023 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-10.1
-- Bump release
+* Wed Apr 12 2023 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-11
+- Bump version
 
 * Fri Apr 7 2023 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-10
-- Fix ob-latex.el command injection vulnerability (#2180586)
+- Fix etags local command injection vulnerability (#2175189)
+- Fix htmlfontify.el command injection vulnerability (#2175178)
+- Fix ob-latex.el command injection vulnerability (#2180587)
 
 * Tue Jan 10 2023 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-9
 - Fix MH-E mail composition with GNU Mailutils (#1991156)
