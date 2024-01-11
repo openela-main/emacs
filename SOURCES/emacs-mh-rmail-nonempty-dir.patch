@@ -1,0 +1,31 @@
+From b73cde5e2815c531df7f5fd13e214a7d92f78239 Mon Sep 17 00:00:00 2001
+From: Mike Kupfer <mkupfer@alum.berkeley.edu>
+Date: Wed, 4 Jul 2018 15:43:04 -0700
+Subject: [PATCH] Fix MH-E mail composition with GNU Mailutils (SF#485)
+
+* lisp/mh-e/mh-comp.el (mh-bare-components): Recursively delete
+the temporary folder.
+---
+ lisp/mh-e/mh-comp.el | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lisp/mh-e/mh-comp.el b/lisp/mh-e/mh-comp.el
+index a9f809cfa1..aa22df8b18 100644
+--- a/lisp/mh-e/mh-comp.el
++++ b/lisp/mh-e/mh-comp.el
+@@ -925,8 +925,10 @@ mh-bare-components
+                      (list "-form" mh-comp-formfile)))
+     (setq new (make-temp-file "comp."))
+     (rename-file (concat temp-folder "/" "1") new t)
+-    (delete-file (concat temp-folder "/" ".mh_sequences"))
+-    (delete-directory temp-folder)
++    ;; The temp folder could contain various metadata files.  Rather
++    ;; than trying to enumerate all the known files, just do a
++    ;; recursive delete on the directory.
++    (delete-directory temp-folder t)
+     new))
+ 
+ (defun mh-read-draft (use initial-contents delete-contents-file)
+-- 
+2.36.1
+
