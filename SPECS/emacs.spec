@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       27.2
-Release:       8%{?dist}.1
+Release:       9%{?dist}
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Source0:       https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
@@ -491,11 +491,11 @@ rm %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/emacs-document23.svg
 %{_includedir}/emacs-module.h
 
 %changelog
-* Tue Apr 4 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-8.1
-- Fix etags local command injection vulnerability (#2184369)
-- Fix htmlfontify.el command injection vulnerability (#2184368)
-- Fix ruby-mode.el local command injection vulnerability (#2184367)
-- Fix ob-latex.el command injection vulnerability (#2184377)
+* Sun Apr 2 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-9
+- Fix etags local command injection vulnerability (#2175190)
+- Fix htmlfontify.el command injection vulnerability (#2175179)
+- Fix ruby-mode.el local command injection vulnerability (#2175142)
+- Fix ob-latex.el command injection vulnerability (#2180590)
 
 * Tue Jan 10 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-8
 - Use a 64KB page size for pdump (#1979804)
