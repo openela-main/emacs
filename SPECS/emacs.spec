@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       27.2
-Release:       9%{?dist}
+Release:       10%{?dist}
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Source0:       https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
@@ -33,6 +33,8 @@ Patch6:        emacs-etags-local-command-injection-vulnerability.patch
 Patch7:        emacs-htmlfontify-command-injection-vulnerability.patch
 Patch8:        emacs-ruby-mode-local-command-injection-vulnerability.patch
 Patch9:        emacs-ob-latex-command-injection-vulnerability.patch
+Patch10:       emacs-org-link-expand-abbrev-unsafe-elisp.patch
+
 BuildRequires: gcc
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -75,7 +77,6 @@ BuildRequires: jansson-devel
 BuildRequires: systemd-devel
 
 BuildRequires: gtk3-devel
-BuildRequires: webkit2gtk3-devel
 
 BuildRequires: gnupg2
 
@@ -201,6 +202,7 @@ Development header files for Emacs.
 %patch7 -p1 -b .htmlfontify-command-injection-vulnerability
 %patch8 -p1 -b .ruby-mode-local-command-injection-vulnerability
 %patch9 -p1 -b .ob-latex-command-injection-vulnerability
+%patch10 -p1 -b .org-link-expand-abbrev-unsafe-elisp
 autoconf
 
 # We prefer our emacs.desktop file
@@ -253,7 +255,7 @@ ln -s ../configure .
 
 %configure --with-dbus --with-gif --with-jpeg --with-png --with-rsvg \
            --with-tiff --with-xft --with-xpm --with-x-toolkit=gtk3 --with-gpm=no \
-           --with-xwidgets --with-modules --with-harfbuzz --with-cairo --with-json
+           --with-modules --with-harfbuzz --with-cairo --with-json
 make bootstrap
 %{setarch} %make_build
 cd ..
@@ -491,7 +493,11 @@ rm %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/emacs-document23.svg
 %{_includedir}/emacs-module.h
 
 %changelog
-* Sun Apr 2 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-9
+* Fri Aug 23 2024 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-10
+- org-link-expand-abbrev: Do not evaluate arbitrary unsafe Elisp code (CVE-2024-39331)
+- Disable xwidgets (RHEL-33447)
+
+* Sun Apr 02 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-9
 - Fix etags local command injection vulnerability (#2175190)
 - Fix htmlfontify.el command injection vulnerability (#2175179)
 - Fix ruby-mode.el local command injection vulnerability (#2175142)
