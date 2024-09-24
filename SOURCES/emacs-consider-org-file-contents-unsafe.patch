@@ -1,0 +1,36 @@
+From 2bc865ace050ff118db43f01457f95f95112b877 Mon Sep 17 00:00:00 2001
+From: Ihor Radchenko <yantar92@posteo.net>
+Date: Tue, 20 Feb 2024 14:59:20 +0300
+Subject: org-file-contents: Consider all remote files unsafe
+
+* lisp/org/org.el (org-file-contents): When loading files, consider all
+remote files (like TRAMP-fetched files) unsafe, in addition to URLs.
+---
+ lisp/org/org.el | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/lisp/org/org.el b/lisp/org/org.el
+index 0f5d17d..76559c9 100644
+--- a/lisp/org/org.el
++++ b/lisp/org/org.el
+@@ -4576,12 +4576,16 @@ from file or URL, and return nil.
+ If NOCACHE is non-nil, do a fresh fetch of FILE even if cached version
+ is available.  This option applies only if FILE is a URL."
+   (let* ((is-url (org-file-url-p file))
++         (is-remote (condition-case nil
++                        (file-remote-p file)
++                      ;; In case of error, be safe.
++                      (t t)))
+          (cache (and is-url
+                      (not nocache)
+                      (gethash file org--file-cache))))
+     (cond
+      (cache)
+-     (is-url
++     ((or is-url is-remote)
+       (with-current-buffer (url-retrieve-synchronously file)
+ 	(goto-char (point-min))
+ 	;; Move point to after the url-retrieve header.
+-- 
+cgit v1.1
+
