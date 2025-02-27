@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       26.1
-Release:       12%{?dist}
+Release:       13%{?dist}
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Group:         Applications/Editors
@@ -32,6 +32,7 @@ Patch7:        emacs-ob-latex-command-injection-vulnerability.patch
 Patch8:        emacs-consider-org-file-contents-unsafe.patch
 Patch9:        emacs-org-link-expand-abbrev-unsafe-elisp.patch
 Patch10:       emacs-mark-contents-untrusted.patch
+Patch11:       emacs-man-el-shell-injection-vulnerability.patch
 
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -193,6 +194,7 @@ packages that add functionality to Emacs.
 %patch8 -p1 -b .consider-org-file-contents-unsafe
 %patch9 -p1 -b .org-link-expand-abbrev-unsafe-elisp
 %patch10 -p1 -b .mark-contents-untrusted
+%patch11 -p1 -b .emacs-man-el-shell-injection-vulnerability
 autoconf
 
 # We prefer our emacs.desktop file
@@ -479,6 +481,9 @@ fi
 %dir %{_datadir}/emacs/site-lisp/site-start.d
 
 %changelog
+* Wed Feb 19 2025 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-13
+- Fix man.el shell injection vulnerability (RHEL-79016)
+
 * Fri Aug 23 2024 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-12
 - org-file-contents: Consider all remote files unsafe (CVE-2024-30205)
 - org-link-expand-abbrev: Do not evaluate arbitrary unsafe Elisp code (CVE-2024-39331)
