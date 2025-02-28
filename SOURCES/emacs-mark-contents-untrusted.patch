@@ -1,0 +1,25 @@
+From 937b9042ad7426acdcca33e3d931d8f495bdd804 Mon Sep 17 00:00:00 2001
+From: Ihor Radchenko <yantar92@posteo.net>
+Date: Tue, 20 Feb 2024 12:44:30 +0300
+Subject: * lisp/gnus/mm-view.el (mm-display-inline-fontify): Mark contents
+ untrusted.
+
+---
+ lisp/gnus/mm-view.el | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lisp/gnus/mm-view.el b/lisp/gnus/mm-view.el
+index 2e1261c..5f234e5 100644
+--- a/lisp/gnus/mm-view.el
++++ b/lisp/gnus/mm-view.el
+@@ -504,6 +504,7 @@ If MODE is not set, try to find mode automatically."
+ 	  (setq coding-system (mm-find-buffer-file-coding-system)))
+ 	(setq text (buffer-string))))
+     (with-temp-buffer
++      (setq untrusted-content t)
+       (buffer-disable-undo)
+       (mm-enable-multibyte)
+       (insert (cond ((eq charset 'gnus-decoded)
+-- 
+cgit v1.1
+

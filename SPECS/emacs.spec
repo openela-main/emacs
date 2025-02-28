@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       27.2
-Release:       10%{?dist}
+Release:       11%{?dist}.1
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Source0:       https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
@@ -33,8 +33,11 @@ Patch6:        emacs-etags-local-command-injection-vulnerability.patch
 Patch7:        emacs-htmlfontify-command-injection-vulnerability.patch
 Patch8:        emacs-ruby-mode-local-command-injection-vulnerability.patch
 Patch9:        emacs-ob-latex-command-injection-vulnerability.patch
-Patch10:       emacs-org-link-expand-abbrev-unsafe-elisp.patch
-
+Patch10:       emacs-consider-org-file-contents-unsafe.patch
+Patch11:       emacs-mark-contents-untrusted.patch
+Patch12:       emacs-latex-preview.patch
+Patch13:       emacs-org-link-expand-abbrev-unsafe-elisp.patch
+Patch14:       emacs-man-el-shell-injection-vulnerability.patch
 BuildRequires: gcc
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -193,16 +196,20 @@ Development header files for Emacs.
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 
-%patch1 -p1 -b .spellchecker
-%patch2 -p1 -b .system-crypto-policies
-%patch3 -p1 -b .glibc2.34
-%patch4 -p1 -b .ctags-local-command-execute-vulnerability
-%patch5 -p1 -b .64KB-page-size-for-pdump
-%patch6 -p1 -b .etags-local-command-injection-vulnerability
-%patch7 -p1 -b .htmlfontify-command-injection-vulnerability
-%patch8 -p1 -b .ruby-mode-local-command-injection-vulnerability
-%patch9 -p1 -b .ob-latex-command-injection-vulnerability
-%patch10 -p1 -b .org-link-expand-abbrev-unsafe-elisp
+%patch -P 1 -p1 -b .spellchecker
+%patch -P 2 -p1 -b .system-crypto-policies
+%patch -P 3 -p1 -b .glibc2.34
+%patch -P 4 -p1 -b .ctags-local-command-execute-vulnerability
+%patch -P 5 -p1 -b .64KB-page-size-for-pdump
+%patch -P 6 -p1 -b .etags-local-command-injection-vulnerability
+%patch -P 7 -p1 -b .htmlfontify-command-injection-vulnerability
+%patch -P 8 -p1 -b .ruby-mode-local-command-injection-vulnerability
+%patch -P 9 -p1 -b .ob-latex-command-injection-vulnerability
+%patch -P 10 -p1 -b .consider-org-file-contents-unsafe
+%patch -P 11 -p1 -b .mark-contents-untrusted
+%patch -P 12 -p1 -b .latex-preview
+%patch -P 13 -p1 -b .org-link-expand-abbrev-unsafe-elisp
+%patch -P 14 -p1 -b .man-el-shell-injection-vulnerability
 autoconf
 
 # We prefer our emacs.desktop file
@@ -493,11 +500,21 @@ rm %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/emacs-document23.svg
 %{_includedir}/emacs-module.h
 
 %changelog
-* Fri Aug 23 2024 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-10
-- org-link-expand-abbrev: Do not evaluate arbitrary unsafe Elisp code (CVE-2024-39331)
-- Disable xwidgets (RHEL-33447)
+* Mon Feb 24 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-11.el9_5.1
+- Fix man.el shell injection vulnerability (RHEL-79021)
+- Eliminate use of obsolete patch syntax (RHEL-80450)
 
-* Sun Apr 02 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-9
+* Wed Feb 19 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-11
+- Fix man.el shell injection vulnerability (RHEL-79025)
+
+* Fri Mar 15 2024 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-10
+- Disable xwidgets (RHEL-14551)
+- org-file-contents: Consider all remote files unsafe (CVE-2024-30205)
+- Make Gnus treats inline MIME contents as untrusted (CVE-2024-30203)
+- Add protection for LaTeX preview (CVE-2024-30204)
+- org-link-expand-abbrev: Do not evaluate arbitrary unsafe Elisp code (CVE-2024-39331)
+
+* Sun Apr 2 2023 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-9
 - Fix etags local command injection vulnerability (#2175190)
 - Fix htmlfontify.el command injection vulnerability (#2175179)
 - Fix ruby-mode.el local command injection vulnerability (#2175142)
