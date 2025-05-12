@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       27.2
-Release:       11%{?dist}.1
+Release:       11%{?dist}.2
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Source0:       https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
@@ -38,6 +38,7 @@ Patch11:       emacs-mark-contents-untrusted.patch
 Patch12:       emacs-latex-preview.patch
 Patch13:       emacs-org-link-expand-abbrev-unsafe-elisp.patch
 Patch14:       emacs-man-el-shell-injection-vulnerability.patch
+Patch15:       emacs-CVE-2024-53920.patch
 BuildRequires: gcc
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -210,6 +211,7 @@ Development header files for Emacs.
 %patch -P 12 -p1 -b .latex-preview
 %patch -P 13 -p1 -b .org-link-expand-abbrev-unsafe-elisp
 %patch -P 14 -p1 -b .man-el-shell-injection-vulnerability
+%patch -P 15 -p1 -b .CVE-2024-53920
 autoconf
 
 # We prefer our emacs.desktop file
@@ -500,6 +502,9 @@ rm %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/emacs-document23.svg
 %{_includedir}/emacs-module.h
 
 %changelog
+* Mon May 05 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-11.el9_5.2
+- Fix arbitrary code execution via Lisp macro expansion (RHEL-69395)
+
 * Mon Feb 24 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-11.el9_5.1
 - Fix man.el shell injection vulnerability (RHEL-79021)
 - Eliminate use of obsolete patch syntax (RHEL-80450)
