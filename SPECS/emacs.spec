@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       26.1
-Release:       13%{?dist}
+Release:       15%{?dist}
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Group:         Applications/Editors
@@ -33,6 +33,7 @@ Patch8:        emacs-consider-org-file-contents-unsafe.patch
 Patch9:        emacs-org-link-expand-abbrev-unsafe-elisp.patch
 Patch10:       emacs-mark-contents-untrusted.patch
 Patch11:       emacs-man-el-shell-injection-vulnerability.patch
+Patch12:       emacs-CVE-2024-53920.patch
 
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -195,6 +196,7 @@ packages that add functionality to Emacs.
 %patch9 -p1 -b .org-link-expand-abbrev-unsafe-elisp
 %patch10 -p1 -b .mark-contents-untrusted
 %patch11 -p1 -b .emacs-man-el-shell-injection-vulnerability
+%patch12 -p1 -b .CVE-2024-53920
 autoconf
 
 # We prefer our emacs.desktop file
@@ -481,6 +483,12 @@ fi
 %dir %{_datadir}/emacs/site-lisp/site-start.d
 
 %changelog
+* Wed May 21 2025 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15
+- Restore definition of variable "enable-dir-local-variables" (RHEL-92830)
+
+* Mon May 05 2025 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-14
+- Fix arbitrary code execution via Lisp macro expansion (RHEL-69394)
+
 * Wed Feb 19 2025 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-13
 - Fix man.el shell injection vulnerability (RHEL-79016)
 
