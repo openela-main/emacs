@@ -1,0 +1,28 @@
+From 6dc4fc7d621008086388dae48f6794f7d69edff9 Mon Sep 17 00:00:00 2001
+From: Robert Pluim <rpluim@gmail.com>
+Date: Tue, 12 Jan 2021 18:36:01 +0100
+Subject: Fix nsm-should-check for "google.com" failure
+
+* lisp/net/nsm.el (nsm-should-check): Extract the mask from
+'network-interface-list' rather than the broadcast
+address (Bug#45798).
+---
+ lisp/net/nsm.el | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lisp/net/nsm.el b/lisp/net/nsm.el
+index 3f3e7133713..0ce65a35ead 100644
+--- a/lisp/net/nsm.el
++++ b/lisp/net/nsm.el
+@@ -239,7 +239,7 @@ otherwise."
+         (mapc
+          (lambda (info)
+            (let ((local-ip (nth 1 info))
+-                 (mask (nth 2 info)))
++                 (mask (nth 3 info)))
+              (when
+                  (nsm-network-same-subnet (substring local-ip 0 -1)
+                                           (substring mask 0 -1)
+-- 
+cgit v1.2.3
+

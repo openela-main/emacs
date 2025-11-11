@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       27.2
-Release:       14%{?dist}.2
+Release:       18%{?dist}
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Source0:       https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
@@ -39,6 +39,13 @@ Patch12:       emacs-latex-preview.patch
 Patch13:       emacs-org-link-expand-abbrev-unsafe-elisp.patch
 Patch14:       emacs-man-el-shell-injection-vulnerability.patch
 Patch15:       emacs-CVE-2024-53920.patch
+# Avoid trademark issues
+Patch16:       emacs-pong-and-tetris-are-excluded.patch
+Patch17:       emacs-fix-flymake-tests-with-gcc-14.patch
+Patch18:       emacs-nsm-should-check.patch
+Patch19:       emacs-tests-for-tetris.patch
+Patch20:       emacs-untrusted-content.patch
+
 BuildRequires: gcc
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -212,19 +219,20 @@ Development header files for Emacs.
 %patch -P 13 -p1 -b .org-link-expand-abbrev-unsafe-elisp
 %patch -P 14 -p1 -b .man-el-shell-injection-vulnerability
 %patch -P 15 -p1 -b .CVE-2024-53920
+%patch -P 16 -p1 -b .pong-and-tetris-are-excluded
+%patch -P 17 -p1 -b .fix-flymake-tests-with-gcc-14
+%patch -P 18 -p1 -b .nsm-should-check
+%patch -P 19 -p1 -b .tests-for-tetris
+%patch -P 20 -p1 -b .untrusted-content
+
+# Avoid trademark issues
+rm lisp/play/pong.el lisp/play/pong.elc \
+   lisp/play/tetris.el lisp/play/tetris.elc
+
 autoconf
 
 # We prefer our emacs.desktop file
 cp %SOURCE3 etc/emacs.desktop
-
-grep -v "tetris.elc" lisp/Makefile.in > lisp/Makefile.in.new \
-   && mv lisp/Makefile.in.new lisp/Makefile.in
-grep -v "pong.elc" lisp/Makefile.in > lisp/Makefile.in.new \
-   && mv lisp/Makefile.in.new lisp/Makefile.in
-
-# Avoid trademark issues
-rm -f lisp/play/tetris.el lisp/play/tetris.elc
-rm -f lisp/play/pong.el lisp/play/pong.el
 
 # Sorted list of info files
 %define info_files ada-mode auth autotype bovine calc ccmode cl dbus dired-x ebrowse ede ediff edt efaq-w32 efaq eieio eintr elisp emacs-gnutls emacs-mime emacs epa erc ert eshell eudc eww flymake forms gnus htmlfontify idlwave ido info mairix-el message mh-e newsticker nxml-mode octave-mode org pcl-cvs pgg rcirc reftex remember sasl sc semantic ses sieve smtpmail speedbar srecode todo-mode tramp url vhdl-mode vip viper widget wisent woman
@@ -502,11 +510,20 @@ rm %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/emacs-document23.svg
 %{_includedir}/emacs-module.h
 
 %changelog
-* Wed May 21 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-14.el9_6.2
-- Restore definition of variable "enable-dir-local-variables" (RHEL-92653)
+* Mon Jun 23 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-18
+- Fix nsm-should-check for "google.com" failure (RHEL-94297)
+- Fix package tests for tetris no longer existing as a package (RHEL-94297)
+- Introduce untrusted-content variable (RHEL-94297)
 
-* Tue May 06 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-14.el9_6.1
-- Bump Z-stream release
+* Wed Jun 18 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-17
+- Pong and Tetris are excluded (RHEL-94297)
+- Fix flymake tests with GCC 14 (RHEL-94297)
+
+* Fri May 09 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-16
+- Restore definition of variable "enable-dir-local-variables" (RHEL-92550)
+
+* Fri May 09 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-15
+- Fix arbitrary code execution via Lisp macro expansion (RHEL-90181)
 
 * Mon Apr 28 2025 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-14
 - Fix arbitrary code execution via Lisp macro expansion (RHEL-69399)

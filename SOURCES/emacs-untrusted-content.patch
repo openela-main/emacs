@@ -1,0 +1,33 @@
+From ccc188fcf98ad9166ee551fac9d94b2603c3a51b Mon Sep 17 00:00:00 2001
+From: Ihor Radchenko <yantar92@posteo.net>
+Date: Tue, 20 Feb 2024 12:43:51 +0300
+Subject: * lisp/files.el (untrusted-content): New variable.
+
+The new variable is to be used when buffer contents comes from untrusted
+source.
+---
+ lisp/files.el | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/lisp/files.el b/lisp/files.el
+index c0d26b2343c..5536af014f6 100644
+--- a/lisp/files.el
++++ b/lisp/files.el
+@@ -695,6 +695,14 @@ Also see the `permanently-enabled-local-variables' variable."
+ Some modes may wish to set this to nil to prevent directory-local
+ settings being applied, but still respect file-local ones.")
+ 
++(defvar-local untrusted-content nil
++  "Non-nil means that current buffer originated from an untrusted source.
++Email clients and some other modes may set this non-nil to mark the
++buffer contents as untrusted.
++
++This variable might be subject to change without notice.")
++(put 'untrusted-content 'permanent-local t)
++
+ (defcustom trusted-content nil
+   "List of files and directories whose content we trust.
+ Be extra careful here since trusting means that Emacs might execute the
+-- 
+cgit v1.2.3
+

@@ -1,0 +1,40 @@
+From 81969482e23b1c046354d9d860e548259f118b4e Mon Sep 17 00:00:00 2001
+From: Glenn Morris <rgm@gnu.org>
+Date: Mon, 28 Dec 2020 11:03:30 -0800
+Subject: Fix package tests for tetris no longer existing as a package
+
+* test/lisp/emacs-lisp/package-tests.el
+(package-test-list-filter-by-name, package-test-list-clear-filter):
+Use ansi-color instead of tetris, which no longer has a version:.
+---
+ test/lisp/emacs-lisp/package-tests.el | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/test/lisp/emacs-lisp/package-tests.el b/test/lisp/emacs-lisp/package-tests.el
+index 23267545f83..92e593328c6 100644
+--- a/test/lisp/emacs-lisp/package-tests.el
++++ b/test/lisp/emacs-lisp/package-tests.el
+@@ -405,9 +405,9 @@ Must called from within a `tar-mode' buffer."
+   "Ensure package list is filtered correctly by package name."
+   (with-package-test ()
+     (let ((buf (package-list-packages)))
+-      (package-menu-filter-by-name "tetris")
++      (package-menu-filter-by-name "ansi-color")
+       (goto-char (point-min))
+-      (should (re-search-forward "^\\s-+tetris" nil t))
++      (should (re-search-forward "^\\s-+ansi-color" nil t))
+       (should (= (count-lines (point-min) (point-max)) 1))
+       (kill-buffer buf))))
+ 
+@@ -463,7 +463,7 @@ Must called from within a `tar-mode' buffer."
+     (let ((buf (package-list-packages)))
+       (let ((num-packages (count-lines (point-min) (point-max))))
+         (should (> num-packages 1))
+-        (package-menu-filter-by-name "tetris")
++        (package-menu-filter-by-name "ansi-color")
+         (should (= (count-lines (point-min) (point-max)) 1))
+         (package-menu-clear-filter)
+         (should (= (count-lines (point-min) (point-max)) num-packages)))
+-- 
+cgit v1.2.3
+
