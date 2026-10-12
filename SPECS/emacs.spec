@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       26.1
-Release:       15%{?dist}
+Release:       15%{?dist}.2
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Group:         Applications/Editors
@@ -34,6 +34,8 @@ Patch9:        emacs-org-link-expand-abbrev-unsafe-elisp.patch
 Patch10:       emacs-mark-contents-untrusted.patch
 Patch11:       emacs-man-el-shell-injection-vulnerability.patch
 Patch12:       emacs-CVE-2024-53920.patch
+Patch13:       emacs-CVE-2026-77219.patch
+Patch14:       emacs-CVE-2026-79992.patch
 
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -197,6 +199,8 @@ packages that add functionality to Emacs.
 %patch10 -p1 -b .mark-contents-untrusted
 %patch11 -p1 -b .emacs-man-el-shell-injection-vulnerability
 %patch12 -p1 -b .CVE-2024-53920
+%patch13 -p1 -b .CVE-2026-77219
+%patch14 -p1 -b .CVE-2026-79992
 autoconf
 
 # We prefer our emacs.desktop file
@@ -483,6 +487,14 @@ fi
 %dir %{_datadir}/emacs/site-lisp/site-start.d
 
 %changelog
+* Thu Sep 24 2026 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15.2
+- Fix TRAMP user name shell injection vulnerability (CVE-2026-79992)
+- Resolves: RHEL-248545
+
+* Thu Sep 24 2026 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15.1
+- Fix integer overflow in PBM image loader (CVE-2026-77219)
+- Resolves: RHEL-248064
+
 * Wed May 21 2025 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15
 - Restore definition of variable "enable-dir-local-variables" (RHEL-92830)
 
