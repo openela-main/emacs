@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       27.2
-Release:       18%{?dist}.2
+Release:       18%{?dist}.3
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Source0:       https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
@@ -51,6 +51,7 @@ Patch21:       emacs-CVE-2026-79992.patch
 # CVE-2026-77219 - Fix undefined behavior in pbm_load
 # https://github.com/emacs-mirror/emacs/commit/b07e634e4cf45162ae0178e32092b040587f2c6c
 Patch22:       emacs-CVE-2026-77219.patch
+Patch23:       emacs-CVE-2026-96442.patch
 
 BuildRequires: gcc
 BuildRequires: atk-devel
@@ -232,6 +233,7 @@ Development header files for Emacs.
 %patch -P 20 -p1 -b .untrusted-content
 %patch -P 21 -p1 -b .CVE-2026-79992
 %patch -P 22 -p1 -b .CVE-2026-77219
+%patch -P 23 -p1 -b .CVE-2026-96442
 
 # Avoid trademark issues
 rm lisp/play/pong.el lisp/play/pong.elc \
@@ -518,6 +520,10 @@ rm %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/emacs-document23.svg
 %{_includedir}/emacs-module.h
 
 %changelog
+* Tue Oct 06 2026 Jacek Migacz <jmigacz@redhat.com> - 1:27.2-18.el9_8.3
+- Generalize trusted-content-p check to all Flymake backends (CVE-2026-96442)
+- Resolves: RHEL-265110
+
 * Wed Aug 26 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 1:27.2-18.el9_8.2
 - Fix integer overflow in pbm_load image validation (RHEL-248067)
 
