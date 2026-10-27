@@ -5,7 +5,7 @@ Summary:       GNU Emacs text editor
 Name:          emacs
 Epoch:         1
 Version:       26.1
-Release:       15%{?dist}.2
+Release:       15%{?dist}.4
 License:       GPLv3+ and CC0-1.0
 URL:           http://www.gnu.org/software/emacs/
 Group:         Applications/Editors
@@ -33,9 +33,12 @@ Patch8:        emacs-consider-org-file-contents-unsafe.patch
 Patch9:        emacs-org-link-expand-abbrev-unsafe-elisp.patch
 Patch10:       emacs-mark-contents-untrusted.patch
 Patch11:       emacs-man-el-shell-injection-vulnerability.patch
-Patch12:       emacs-CVE-2024-53920.patch
-Patch13:       emacs-CVE-2026-77219.patch
-Patch14:       emacs-CVE-2026-79992.patch
+# Define untrusted-content variable - prerequisite for Patch13 and Patch16
+Patch12:       emacs-untrusted-content.patch
+Patch13:       emacs-CVE-2024-53920.patch
+Patch14:       emacs-CVE-2026-77219.patch
+Patch15:       emacs-CVE-2026-79992.patch
+Patch16:       emacs-CVE-2026-96442.patch
 
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
@@ -198,9 +201,11 @@ packages that add functionality to Emacs.
 %patch9 -p1 -b .org-link-expand-abbrev-unsafe-elisp
 %patch10 -p1 -b .mark-contents-untrusted
 %patch11 -p1 -b .emacs-man-el-shell-injection-vulnerability
-%patch12 -p1 -b .CVE-2024-53920
-%patch13 -p1 -b .CVE-2026-77219
-%patch14 -p1 -b .CVE-2026-79992
+%patch12 -p1 -b .untrusted-content
+%patch13 -p1 -b .CVE-2024-53920
+%patch14 -p1 -b .CVE-2026-77219
+%patch15 -p1 -b .CVE-2026-79992
+%patch16 -p1 -b .CVE-2026-96442
 autoconf
 
 # We prefer our emacs.desktop file
@@ -487,6 +492,14 @@ fi
 %dir %{_datadir}/emacs/site-lisp/site-start.d
 
 %changelog
+* Wed Oct 21 2026 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15.4
+- Add missing untrusted-content variable definition (fixes CVE-2026-96442)
+- Related: RHEL-265099
+
+* Wed Oct 07 2026 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15.3
+- Generalize trusted-content-p check to all Flymake backends (CVE-2026-96442)
+- Resolves: RHEL-265099
+
 * Thu Sep 24 2026 Jacek Migacz <jmigacz@redhat.com> - 1:26.1-15.2
 - Fix TRAMP user name shell injection vulnerability (CVE-2026-79992)
 - Resolves: RHEL-248545
